@@ -1,0 +1,75 @@
+#!/usr/bin/env python3
+import argparse
+
+def print_help():
+    print("""
+        Valid command-line arguments:
+        -h                : Show this help message.
+        -s <name>         : Scan the file <name> and print the tokens found.
+        -p <name>         : Parse the file <name> and report the number of operations or errors.
+        -r <name>         : Parse the file <name> and print the intermediate representation.
+            """)
+
+def scan_file(filename):
+    # Simulate scanning the file and printing tokens
+    print(f"Scanning file: {filename}")
+    # Example output for each token
+    tokens = [
+        (1, "IDENTIFIER", "x"),
+        (1, "OPERATOR", "="),
+        (1, "NUMBER", "42"),
+    ]
+    for line_num, token_type, lexeme in tokens:
+        print(f"Line {line_num}: {token_type} ({lexeme})")
+
+def parse_file(filename):
+    # Simulate parsing the file and reporting success or errors
+    print(f"Parsing file: {filename}")
+    success = True  # Simulate success/failure
+    if success:
+        operations_count = 10  # Simulate the number of operations processed
+        print(f"Parse succeeded. Processed {operations_count} operations.")
+    else:
+        print("Parse found errors.")
+
+def parse_and_print_ir(filename):
+    # Simulate parsing the file and printing intermediate representation
+    print(f"Parsing and building IR for file: {filename}")
+    # Example of intermediate representation output
+    ir = [
+        "Operation: ADD, Operands: x, y",
+        "Operation: MUL, Operands: z, 42"
+    ]
+    for line in ir:
+        print(line)
+
+def main():
+    # Create the argument parser
+    parser = argparse.ArgumentParser(add_help=False)  # Custom help handling
+
+    # Define the four modes
+    parser.add_argument('-h', action='store_true', help="Show help message")
+    parser.add_argument('-s', metavar='<name>', help="Scan the file <name>")
+    parser.add_argument('-p', metavar='<name>', help="Parse the file <name>")
+    parser.add_argument('-r', metavar='<name>', help="Parse the file and print intermediate representation")
+
+    # Parse arguments
+    args = parser.parse_args()
+
+    # Handle the -h flag (help)
+    if args.h:
+        print_help()
+    # Handle the -s flag (scan mode)
+    elif args.s:
+        scan_file(args.s)
+    # Handle the -p flag (parse mode)
+    elif args.p:
+        parse_file(args.p)
+    # Handle the -r flag (representation mode)
+    elif args.r:
+        parse_and_print_ir(args.r)
+    else:
+        print("Error: No valid arguments provided. Use -h for help.")
+
+if __name__ == "__main__":
+    main()
