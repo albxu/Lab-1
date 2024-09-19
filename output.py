@@ -11,14 +11,21 @@ def print_tokens(file):
     # keep reading words until end of file
     while scanner.EOF == False:
         token = scanner.scan_word(line)
-        print(token)
-        print(str(scanner.line_count) + ": " + str(format_token(token)))
-        if token[0] == 10:
+
+        #skip the line if there is an error
+        if token[0] == -1:
             scanner.line_count += 1
             scanner.line_index = 0
             line = scanner.scan_line(file)
-            if scanner.EOF == True:
-                print(str(scanner.line_count) + ": " + str(format_token(line)))
+        
+        else:
+            print(str(scanner.line_count) + ": " + str(format_token(token)))
+            if token[0] == 10:
+                scanner.line_count += 1
+                scanner.line_index = 0
+                line = scanner.scan_line(file)
+                if scanner.EOF == True:
+                    print(str(scanner.line_count) + ": " + str(format_token(line)))
 
 
 def format_token(token: tuple):

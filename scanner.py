@@ -1,8 +1,7 @@
 import sys
 
-opcodes = ["load", "store", "loadI", "add", "sub", "mult", "lshift", "rshift", "output", "nop"]
+words = ["load", "store", "loadI", "add", "sub", "mult", "lshift", "rshift", "output", "nop", ',', "=>"]
 syntactic_categories = ["MEMOP", "LOADI", "ARITHOP", "OUTPUT", "NOP", "CONSTANT", "REGISTER", "COMMA", "INTO", "EOF", "EOL"]
-line_index = 0
 EOF = False
 line_count = 0
 line_index = 0 
@@ -50,12 +49,11 @@ def scan_word(input_string):
                 if c == ' ':
                     return (4, 9)
                 else:
-                    opcode_whitespace_error("nop")
-                    return (-1, 0)
+                    return opcode_whitespace_error("nop")
             else:
-                return "Error: Expected 'p' after 'no'"
+                return not_a_word_error("no" + c)
         else:
-            return "Error: Expected 'o' after 'n'"
+            return not_a_word_error("n" + c)
     
     # lshift, load, and loadI opcodes
     if c == 'l':
@@ -73,15 +71,15 @@ def scan_word(input_string):
                             if c == ' ':
                                 return (2, 6)
                             else:
-                                return "Error: Expected ' ' after 'lshift'"
+                                return opcode_whitespace_error("lshift")
                         else:
-                            return "Error: Expected 'f' after 'lshi'"
+                            return not_a_word_error("lshif" + c)
                     else:
-                        return "Error: Expected 'i' after 'l'"
+                        return not_a_word_error("lshi" + c)
                 else:
-                    return "Error: Expected 'h' after 'ls'"
+                    return not_a_word_error("lsh" + c)
             else:
-                return "Error: Expected 's' after 'l'"
+                return  not_a_word_error("ls" + c)
         elif c == 'o':
             c = next_char()
             if c == 'a':
@@ -91,15 +89,19 @@ def scan_word(input_string):
                     if c == ' ':
                         return (0, 0)
                     if c == 'I':
-                        return (1, 2)
+                        c = next_char()
+                        if c == ' ':
+                            return (1, 2)
+                        else:
+                            return opcode_whitespace_error("loadI")
                     else:
-                        return "Error: Expected 'I' after 'load'"
+                        return not_a_word_error("load" + c)
                 else:
-                    return "Error: Expected 'd' after 'loa'"
+                    return not_a_word_error("loa" + c)
             else:
-                return "Error: Expected 'a' after 'l'"
+                return not_a_word_error("lo" + c)
         else:
-            return "Error: Expected 's' after 'l'"
+            return not_a_word_error("l" + c)
     
     elif c == 's':
         c = next_char()
@@ -110,10 +112,10 @@ def scan_word(input_string):
                 if c == ' ':
                     return (2, 4)
                 else:
-                    return "Error: Expected ' ' after 'sub'"
+                    return opcode_whitespace_error("sub")
             else:
-                return "Error: Expected 'b' after 'su'"
-        if c == 't':
+                return not_a_word_error("su" + c)
+        elif c == 't':
             c = next_char()
             if c == 'o':
                 c = next_char()
@@ -124,15 +126,15 @@ def scan_word(input_string):
                         if c == ' ':
                             return (0, 1)
                         else:
-                            return "Error: Expected ' ' after 'store'"
+                            return opcode_whitespace_error("store")
                     else:
-                        return "Error: Expected 'e' after 'stor'"
+                        return not_a_word_error("stor" + c)
                 else:
-                    return "Error: Expected 'r' after 'sto'"
+                    return not_a_word_error("sto" + c)
             else:
-                return "Error: Expected 't' after 'st'"
+                return not_a_word_error("st" + c)
         else:
-            return "Error: Expected 's' after 's'"
+            return not_a_word_error("s" + c)
     
     # mult opcode
     elif c == 'm':
@@ -146,13 +148,13 @@ def scan_word(input_string):
                     if c == ' ':
                         return (2, 5)
                     else:
-                        return "Error: Expected ' ' after 'mult'"
+                        return opcode_whitespace_error("mult")
                 else:
-                    return "Error: Expected 't' after 'mul'"
+                    return not_a_word_error("mul" + c)
             else:
-                return "Error: Expected 'l' after 'mu'"
+                return not_a_word_error("mu" + c)
         else:
-            return "Error: Expected 'u' after 'm'"
+            return not_a_word_error("m" + c)    
         
     # add opcode
     elif c == 'a':
@@ -164,11 +166,11 @@ def scan_word(input_string):
                 if c == ' ':
                     return (2, 3)
                 else:
-                    return "Error: Expected ' ' after 'add'"
+                    return opcode_whitespace_error("add")
             else:
-                return "Error: Expected 'd' after 'ad'"
+                return not_a_word_error("ad" + c)
         else:
-            return "Error: Expected 'd' after 'a'"
+            return not_a_word_error("a" + c)
         
     # rshift opcode
     elif c == 'r':
@@ -182,17 +184,30 @@ def scan_word(input_string):
                     if c == 'f':
                         c = next_char()
                         if c == 't':
-                            return (2, 7)
+                            c == next_char()
+                            if c == ' ':
+                                return (2, 7)
+                            else:
+                                return opcode_whitespace_error("rshift")
                         else:
-                            return "Error: Expected 't' after 'rshi'"
+                            return not_a_word_error("rshif" + c)
                     else:
-                        return "Error: Expected 'f' after 'rsh'"
+                        return not_a_word_error("rshi" + c)
                 else:
-                    return "Error: Expected 'i' after 'r'"
+                    return not_a_word_error("rsh" + c)
             else:
-                return "Error: Expected 's' after 'r'"
+                return not_a_word_error("rs" + c)
+        elif c >= '0' and c <= '9':
+            n = 0
+            while c >= '0' and c <= '9':
+                t = int(c)
+                c = next_char()
+                n = n * 10 + t
+            line_index -= 1
+            return (6, n)
+    
         else:
-            return "Error: Expected 's' after 'r'"
+            return not_a_word_error("r" + c)
 
     # output opcode
     elif c == 'o':
@@ -206,18 +221,25 @@ def scan_word(input_string):
                     if c == 'u':
                         c = next_char()
                         if c == 't':
-                            return (8, 3)
+                            c = next_char()
+                            if c == ' ':
+                                return (8, 3)
+                            else:
+                                return opcode_whitespace_error("output")
                         else:
-                            return "Error: Expected 't' after 'outpu'"
+                            return not_a_word_error("outp" + c)
                     else:
-                        return "Error: Expected 'u' after 'outp'"
+                        return not_a_word_error("out" + c)
                 else:
-                    return "Error: Expected 'p' after 'out'"
+                    return not_a_word_error("ou" + c)
             else:
-                return "Error: Expected 't' after 'ou'"
+                return not_a_word_error("o" + c)
         else:
-            return "Error: Expected 'u' after 'o'"
+            return not_a_word_error("o" + c)
     
+    # handle commas
+    elif c == ',':
+        return (7, ',')
     # handle new lines
     elif c == '\n' or c == '\r\n':
         return (10, 0)
@@ -228,9 +250,9 @@ def scan_word(input_string):
         if c == '/':
             return None
         else:
-            return "Error: Expected '/' after '/'"
+            return not_a_word_error("/" + c)
         
-    # handle constants
+    # handle numbers
     if (c < '0' or c > '9'):
         return "Error: Expected a digit"
     else:
@@ -245,7 +267,16 @@ def scan_word(input_string):
 # handle error messages
 # prints an error message based on given word
 def opcode_whitespace_error(opcode: str):
-    print("ERROR " + str(line_count) + ": " + "expected whitespace after opcode: " + opcode, file=sys.stderr)
+    global line_index
+    print(f'ERROR {line_count}: expected whitespace after opcode: "{opcode}"', file=sys.stderr)
+    line_index -= 1
+    return (-1, 0)
+
+def not_a_word_error(word):
+    global line_index
+    print(f'ERROR {line_count}: "{word}" is not a valid word', file=sys.stderr)
+    line_index -= 1
+    return (-1, 0)
 
 
 
