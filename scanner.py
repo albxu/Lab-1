@@ -3,8 +3,8 @@ import sys
 words = ["load", "store", "loadI", "add", "sub", "mult", "lshift", "rshift", "output", "nop", ',', "=>"]
 syntactic_categories = ["MEMOP", "LOADI", "ARITHOP", "OUTPUT", "NOP", "CONSTANT", "REGISTER", "COMMA", "INTO", "EOF", "EOL"]
 EOF = False
-line_count = 0
-line_index = 0 
+line_count = 1
+line_index = 0
 
 
 def scan_line(file):
@@ -251,13 +251,13 @@ def scan_word(input_string):
 
     # handle new lines
     elif c == '\n' or c == '\r\n':
-        return (10, 0)
+        return (10, '\\n')
     
     # handle comments
     elif c == '/':
         c = next_char()
         if c == '/':
-            return (-1, 0)
+            return (10, 0)
         else:
             return not_a_word_error("/" + c)
         
@@ -279,13 +279,13 @@ def opcode_whitespace_error(opcode: str):
     global line_index
     print(f'ERROR {line_count}: expected whitespace after opcode: "{opcode}"', file=sys.stderr)
     line_index -= 1
-    return (-1, 0)
+    return (10, 0)
 
 def not_a_word_error(word):
     global line_index
     print(f'ERROR {line_count}: "{word}" is not a valid word', file=sys.stderr)
     line_index -= 1
-    return (-1, 0)
+    return (10, 0)
 
 
 
