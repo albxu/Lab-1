@@ -223,7 +223,7 @@ def scan_word(input_string):
                         if c == 't':
                             c = next_char()
                             if c == ' ':
-                                return (8, 3)
+                                return (3, 8)
                             else:
                                 return opcode_whitespace_error("output")
                         else:
@@ -240,6 +240,15 @@ def scan_word(input_string):
     # handle commas
     elif c == ',':
         return (7, ',')
+    
+    # handle into
+    elif c == '=':
+        c = next_char()
+        if c == '>':
+            return (8, "=>")
+        else:
+            return not_a_word_error("= " + c)
+
     # handle new lines
     elif c == '\n' or c == '\r\n':
         return (10, 0)
@@ -248,13 +257,13 @@ def scan_word(input_string):
     elif c == '/':
         c = next_char()
         if c == '/':
-            return None
+            return (-1, 0)
         else:
             return not_a_word_error("/" + c)
         
     # handle numbers
     if (c < '0' or c > '9'):
-        return "Error: Expected a digit"
+        return not_a_word_error(c)
     else:
         n = 0
         while c >= '0' and c <= '9':

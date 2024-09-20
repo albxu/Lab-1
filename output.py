@@ -12,35 +12,57 @@ def print_tokens(file):
     while scanner.EOF == False:
         token = scanner.scan_word(line)
 
-        #skip the line if there is an error
+        #skip the rest of the line if there is an error or a comment
         if token[0] == -1:
+            print(str(scanner.line_count) + ": " + str(format_token((10, 0))))
             scanner.line_count += 1
             scanner.line_index = 0
             line = scanner.scan_line(file)
+            # check if the new line is the end of file
+            if scanner.EOF == True:
+                print(str(scanner.line_count) + ": " + str(format_token(line)))
         
         else:
             print(str(scanner.line_count) + ": " + str(format_token(token)))
+            # check for new line
             if token[0] == 10:
                 scanner.line_count += 1
                 scanner.line_index = 0
                 line = scanner.scan_line(file)
+
+                # check if the new line is the end of file
                 if scanner.EOF == True:
                     print(str(scanner.line_count) + ": " + str(format_token(line)))
 
 
+
 def format_token(token: tuple):
+    '''
+    Formats the token to be printed in the format:
+    < grammar, "lexeme" >
+    '''
     grammar_idx, lexeme_idx = token
-    if grammar_idx != 5 and grammar_idx != 6:
-        if grammar_idx <= 4:
-            return f'< {grammar[grammar_idx]}, {opcodes[lexeme_idx]} >'
-        elif grammar_idx == 7:
-            return f'< {grammar[grammar_idx]}, "," >'
-        elif grammar_idx == 8:
-            return f'< {grammar[grammar_idx]}, "=>" >'
-        elif grammar_idx == 9:
-            return f'< {grammar[grammar_idx]}, "" >'
-        elif grammar_idx == 10:
-            return f'< {grammar[grammar_idx]}, "\\n" >'
+    # opcode grammars
+    if grammar_idx <= 4:
+        return f'< {grammar[grammar_idx]}, "{opcodes[lexeme_idx]}" >'
+    # constant grammar
+    elif grammar_idx == 5:
+        return f'< {grammar[grammar_idx]}, "{lexeme_idx}" >'
+    # register grammar
+    elif grammar_idx == 6:
+        return f'< {grammar[grammar_idx]}, "r{lexeme_idx}" >'
+    # comma grammar
+    elif grammar_idx == 7:
+        return f'< {grammar[grammar_idx]}, "{lexeme_idx}" >'
+    # into grammar
+    elif grammar_idx == 8:
+        return f'< {grammar[grammar_idx]}, "{lexeme_idx}" >'
+    # end of file grammar
+    elif grammar_idx == 9:
+        return f'< {grammar[grammar_idx]}, "" >'
+    # new line grammar
+    elif grammar_idx == 10:
+        return f'< {grammar[grammar_idx]}, "\\n" >'
         
         
     
