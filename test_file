@@ -1,4 +1,7 @@
 // short ILOC program that ends without a newline
-load r1 => r2
+load => r2
+
+
+
 store r1      =>     r1
 output 4 //s/df output 4
