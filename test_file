@@ -1,7 +1,2 @@
 // short ILOC program that ends without a newline
-load r2 => r1 jsajdf
-
-
-
-store r1      =>     r1
-output 4 //s/df output 4
+load r2 => r1 load r2 => r1
