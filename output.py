@@ -3,7 +3,7 @@ grammar = ["MEMOP", "LOADI", "ARITHOP", "OUTPUT", "NOP", "CONSTANT", "REGISTER",
 
 import scanner
 def get_next_token(line):
-    if scanner.EOF == True:
+    if scanner.eof == True:
         return (9, "")
     else:
         token = scanner.scan_word(line)
@@ -11,8 +11,9 @@ def get_next_token(line):
 
 def print_tokens(file):
     line = scanner.scan_line(file)
+    scanner.line_count += 1
     token = (0, "")
-    while token != (9, ""):
+    while token != ((9, "")):
         token = get_next_token(line)
         print(str(scanner.line_count) + ": " + str(format_token(token)))
         if token[0] == 10:

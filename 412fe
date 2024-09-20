@@ -42,10 +42,7 @@ def main():
     # code elided
 
     if flag == '-p':
-
-        # Run the code for the '-p' option
-
-        # code elided
+        parser.parse(input_file)
         return
 
     elif flag == '-r':
