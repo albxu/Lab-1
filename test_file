@@ -1,5 +1,5 @@
 // short ILOC program that ends without a newline
-load => r1 jsajdf
+load r2 => r1 jsajdf
 
 
 
