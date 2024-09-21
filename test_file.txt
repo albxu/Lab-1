@@ -1,2 +1,4 @@
 // short ILOC program that ends without a newline
-load r2 => r1 a
+store r2 => r2
+asfdsafjsaf
+store r2

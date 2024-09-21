@@ -1,8 +1,14 @@
-opcodes = ["load", "store", "loadI", "add", "sub", "mult", "lshift", "rshift", "output", "nop"]
-grammar = ["MEMOP", "LOADI", "ARITHOP", "OUTPUT", "NOP", "CONSTANT", "REGISTER", "COMMA", "INTO", "ENDFILE", "NEWLINE"]
+# Description: This file contains the functions to print the tokens from the input file.
+
+# Global Variables
+opcodes = ["load", "store", "loadI", "add", "sub", "mult", "lshift", "rshift", "output", "nop"] # list of opcodes for index mapping
+grammar = ["MEMOP", "LOADI", "ARITHOP", "OUTPUT", "NOP", "CONSTANT", "REGISTER", "COMMA", "INTO", "ENDFILE", "NEWLINE"] # list of grammars for index mapping
 
 import scanner
 def get_next_token(line):
+    '''
+    Returns the next token from the input file.
+    '''
     if scanner.eof == True:
         return (9, "")
     else:
@@ -10,6 +16,9 @@ def get_next_token(line):
         return(token)
 
 def print_tokens(file):
+    '''
+    Prints the tokens from the input file.
+    '''
     line = scanner.scan_line(file)
     scanner.line_count += 1
     token = (0, "")
@@ -20,37 +29,6 @@ def print_tokens(file):
             scanner.line_count += 1
             scanner.line_index = 0
             line = scanner.scan_line(file)
-# def print_tokens(file):
-#     line = scanner.scan_line(file)
-#     # if the line is the end of file print out the token
-#     if scanner.EOF == True:
-#         print(str(scanner.line_count) + ": " + str(format_token(line)))
-
-#     # keep reading words until end of file
-#     while scanner.EOF == False:
-#         token = scanner.scan_word(line)
-
-#         #skip the rest of the line if there is an error or a comment
-#         if token[0] == -1:
-#             print(str(scanner.line_count) + ": " + str(format_token((10, 0))))
-#             scanner.line_count += 1
-#             scanner.line_index = 0
-#             line = scanner.scan_line(file)
-#             # check if the new line is the end of file
-#             if scanner.EOF == True:
-#                 print(str(scanner.line_count) + ": " + str(format_token(line)))
-        
-#         else:
-#             print(str(scanner.line_count) + ": " + str(format_token(token)))
-#             # check for new line
-#             if token[0] == 10:
-#                 scanner.line_count += 1
-#                 scanner.line_index = 0
-#                 line = scanner.scan_line(file)
-
-#                 # check if the new line is the end of file
-#                 if scanner.EOF == True:
-#                     print(str(scanner.line_count) + ": " + str(format_token(line)))
 
 def format_token(token: tuple):
     '''

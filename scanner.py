@@ -1,12 +1,11 @@
+# Description: This file contains the scanner for the ILOC language.
 import sys
 
-words = ["load", "store", "loadI", "add", "sub", "mult", "lshift", "rshift", "output", "nop", ',', "=>"]
-syntactic_categories = ["MEMOP", "LOADI", "ARITHOP", "OUTPUT", "NOP", "CONSTANT", "REGISTER", "COMMA", "INTO", "EOF", "EOL"]
-eof = False
-line_count = 0
-line_index = 0
-next_line = False
-
+# Global variables
+eof = False # flag to indicate end of file
+line_count = 0  # keep track of line number for printing and error messages
+line_index = 0  # keep track of the index of the current line
+next_line = False   # flag to indicate if scanner should go to the next line
 
 def scan_line(file):
     global eof, line_count
@@ -251,7 +250,7 @@ def scan_word(input_string):
     # handle new lines
     elif c == '\n' or c == '\r\n':
         next_line = True
-        return (10, '\\n')
+        return (10, 0)
     
     # handle comments
     elif c == '/':
@@ -274,21 +273,26 @@ def scan_word(input_string):
         line_index -= 1
         return (5, n)
         
-# handle error messages
-# prints an error message based on given word
 def opcode_whitespace_error(opcode: str):
+    '''
+    Print an error message for a missing whitespace after an opcode.
+    Newline token with -1 lexeme means an error occurred.
+    '''
     global line_index, next_line
     print(f'ERROR {line_count}: expected whitespace after opcode: "{opcode}"', file=sys.stderr)
     next_line = True
     line_index -= 1
-    return (10, 0)
+    return (10, -1)
 
 def not_a_word_error(word):
+    '''
+    Print an error message for an invalid word.
+    '''
     global line_index, next_line
-    print(f'ERROR {line_count}: "{word}" is not a valid word', file=sys.stderr)
+    print(f'ERROR {line_count}: {repr(word)} is not a valid word', file=sys.stderr)
     next_line = True
     line_index -= 1
-    return (10, 0)
+    return (10, -1)
 
 
 

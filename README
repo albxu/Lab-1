@@ -1,0 +1,11 @@
+//NAME: Albert Xu
+//NETID: asx1
+
+// To run the program, type the following into the terminal:
+// ./412fe with optional flags and input file name:
+// -h: prints out the help menu
+// -s: scans the input file and prints out the stream of tokens from the scanner
+// -p: scans and parses the input file and returns success and number of operations in file if successful
+// -r: scans and parses the input and returns the ir representation of the input file if successful
+
+
