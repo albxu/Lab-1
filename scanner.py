@@ -44,7 +44,7 @@ def scan_word(input_string):
             c = next_char()
             if c == 'p':
                 c = next_char()
-                if c == ' ':
+                if c == ' ' or c == '\t':
                     return (4, 9)
                 else:
                     return opcode_whitespace_error("nop")
@@ -66,7 +66,7 @@ def scan_word(input_string):
                         c = next_char()
                         if c == 't':
                             c = next_char()
-                            if c == ' ':
+                            if c == ' ' or c == '\t':
                                 return (2, 6)
                             else:
                                 return opcode_whitespace_error("lshift")
@@ -84,11 +84,11 @@ def scan_word(input_string):
                 c = next_char()
                 if c == 'd':
                     c = next_char()
-                    if c == ' ':
+                    if c == ' ' or c == '\t':
                         return (0, 0)
                     if c == 'I':
                         c = next_char()
-                        if c == ' ':
+                        if c == ' ' or c == '\t':
                             return (1, 2)
                         else:
                             return opcode_whitespace_error("loadI")
@@ -107,7 +107,7 @@ def scan_word(input_string):
             c = next_char()
             if c == 'b':
                 c = next_char()
-                if c == ' ':
+                if c == ' ' or c == '\t':
                     return (2, 4)
                 else:
                     return opcode_whitespace_error("sub")
@@ -121,7 +121,7 @@ def scan_word(input_string):
                     c = next_char()
                     if c == 'e':
                         c = next_char()
-                        if c == ' ':
+                        if c == ' ' or c == '\t':
                             return (0, 1)
                         else:
                             return opcode_whitespace_error("store")
@@ -143,7 +143,7 @@ def scan_word(input_string):
                 c = next_char()
                 if c == 't':
                     c = next_char()
-                    if c == ' ':
+                    if c == ' ' or c == '\t':
                         return (2, 5)
                     else:
                         return opcode_whitespace_error("mult")
@@ -161,7 +161,7 @@ def scan_word(input_string):
             c = next_char()
             if c == 'd':
                 c = next_char()
-                if c == ' ':
+                if c == ' ' or c == '\t':
                     return (2, 3)
                 else:
                     return opcode_whitespace_error("add")
@@ -183,7 +183,7 @@ def scan_word(input_string):
                         c = next_char()
                         if c == 't':
                             c == next_char()
-                            if c == ' ':
+                            if c == ' ' or c == '\t':
                                 return (2, 7)
                             else:
                                 return opcode_whitespace_error("rshift")
@@ -220,7 +220,7 @@ def scan_word(input_string):
                         c = next_char()
                         if c == 't':
                             c = next_char()
-                            if c == ' ':
+                            if c == ' ' or c == '\t':
                                 return (3, 8)
                             else:
                                 return opcode_whitespace_error("output")
